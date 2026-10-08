@@ -31,7 +31,9 @@ jobs:
           curl -fsSL -o sdk.7z "${{ steps.sdk.outputs.url }}"
           mkdir sdk
           7z x -osdk sdk.7z >/dev/null
-          ls sdk
+          echo "--- SDK root ---"; ls -la sdk
+          echo "--- tree (3 levels) ---"; find sdk -maxdepth 3 -type d | sort | head -40
+          echo "--- all xcodeprojs ---"; find sdk -name "*.xcodeproj" | head -20
 
       - name: Build SDK support libraries
         run: |
