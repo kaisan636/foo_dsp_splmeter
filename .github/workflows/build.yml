@@ -1,0 +1,76 @@
+name: Build (macOS)
+
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Resolve latest foobar2000 SDK download URL
+        id: sdk
+        run: |
+          PAGE=$(curl -fsSL https://www.foobar2000.org/SDK)
+          URL=$(echo "$PAGE" | grep -oE 'href="[^"]*SDK[^"]*\.(7z|zip)"' | head -1 | sed 's/href="//; s/"//')
+          case "$URL" in
+            http*) ;;
+            /*) URL="https://www.foobar2000.org$URL" ;;
+          esac
+          echo "url=$URL" >> "$GITHUB_OUTPUT"
+          echo "SDK URL: $URL"
+
+      - name: Download and unpack SDK
+        run: |
+          brew install p7zip
+          curl -fsSL -o sdk.7z "${{ steps.sdk.outputs.url }}"
+          mkdir sdk
+          7z x -osdk sdk.7z >/dev/null
+          ls sdk
+
+      - name: Build SDK support libraries
+        run: |
+          set -e
+          for t in "pfc/pfc.xcodeproj pfc-Mac" \
+                   "foobar2000/shared/shared.xcodeproj shared" \
+                   "foobar2000/SDK/foobar2000_SDK.xcodeproj foobar2000_SDK" \
+                   "foobar2000/helpers/foobar2000_SDK_helpers.xcodeproj foobar2000_SDK_helpers" \
+                   "foobar2000/foobar2000_component_client/foobar2000_component_client.xcodeproj foobar2000_component_client"; do
+            set -- $t
+            PROJ="$1"; TARGET="$2"
+            echo "Building $TARGET..."
+            xcodebuild -project "sdk/$PROJ" -target "$TARGET" -configuration Release \
+              CONFIGURATION_BUILD_DIR="$PWD/build/Release" CODE_SIGNING_ALLOWED=NO build
+          done
+
+      - name: Build component
+        run: |
+          xcodebuild -project foo_dsp_splmeter.xcodeproj -target foo_dsp_splmeter \
+            -configuration Release CONFIGURATION_BUILD_DIR="$PWD/build/Release" \
+            CODE_SIGNING_ALLOWED=NO build
+
+      - name: Verify artifact
+        run: |
+          ls -la build/Release/
+          file build/Release/foo_dsp_splmeter.component/Contents/MacOS/* || true
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: foo_dsp_splmeter.component
+          path: build/Release/foo_dsp_splmeter.component
+
+      - name: Attach to release
+        if: startsWith(github.ref, 'refs/tags/')
+        run: |
+          cd build/Release
+          zip -r ../../foo_dsp_splmeter.component.zip foo_dsp_splmeter.component
+          cd ../..
+          gh release create "${{ github.ref_name }}" foo_dsp_splmeter.component.zip \
+            --title "${{ github.ref_name }}" --generate-notes
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -1,0 +1,270 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 54;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		A10000000000000100000001 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000100000011 /* main.cpp */; };
+		A10000000000000100000002 /* dsp_splmeter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000100000012 /* dsp_splmeter.cpp */; };
+		A10000000000000100000003 /* SPLMeterView.mm in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000100000013 /* SPLMeterView.mm */; };
+		A10000000000000100000004 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A10000000000000100000021 /* Cocoa.framework */; };
+		A10000000000000100000005 /* libfoobar2000_SDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A10000000000000100000022 /* libfoobar2000_SDK.a */; };
+		A10000000000000100000006 /* libfoobar2000_SDK_helpers.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A10000000000000100000023 /* libfoobar2000_SDK_helpers.a */; };
+		A10000000000000100000007 /* libpfc-Mac.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A10000000000000100000024 /* libpfc-Mac.a */; };
+		A10000000000000100000008 /* libshared.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A10000000000000100000025 /* libshared.a */; };
+		A10000000000000100000009 /* libfoobar2000_component_client.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A10000000000000100000026 /* libfoobar2000_component_client.a */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		A10000000000000100000030 /* foo_dsp_splmeter.component */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = foo_dsp_splmeter.component; sourceTree = BUILT_PRODUCTS_DIR; };
+		A10000000000000100000011 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		A10000000000000100000012 /* dsp_splmeter.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = dsp_splmeter.cpp; sourceTree = "<group>"; };
+		A10000000000000100000014 /* dsp_splmeter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = dsp_splmeter.h; sourceTree = "<group>"; };
+		A10000000000000100000015 /* stdafx.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = stdafx.h; sourceTree = "<group>"; };
+		A10000000000000100000016 /* foobar2000-mac-class-suffix.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "foobar2000-mac-class-suffix.h"; sourceTree = "<group>"; };
+		A10000000000000100000013 /* SPLMeterView.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = SPLMeterView.mm; sourceTree = "<group>"; };
+		A10000000000000100000021 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
+		A10000000000000100000022 /* libfoobar2000_SDK.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libfoobar2000_SDK.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		A10000000000000100000023 /* libfoobar2000_SDK_helpers.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libfoobar2000_SDK_helpers.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		A10000000000000100000024 /* libpfc-Mac.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = "libpfc-Mac.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		A10000000000000100000025 /* libshared.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libshared.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		A10000000000000100000026 /* libfoobar2000_component_client.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libfoobar2000_component_client.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		A10000000000000100000040 /* Products */ = {isa = PBXGroup; children = (A10000000000000100000030 /* foo_dsp_splmeter.component */); name = Products; sourceTree = "<group>"; };
+		A10000000000000100000041 /* Sources */ = {isa = PBXGroup; children = (
+			A10000000000000100000011 /* main.cpp */,
+			A10000000000000100000012 /* dsp_splmeter.cpp */,
+			A10000000000000100000014 /* dsp_splmeter.h */,
+			A10000000000000100000015 /* stdafx.h */,
+			A10000000000000100000016 /* foobar2000-mac-class-suffix.h */,
+			A10000000000000100000042 /* Mac */,
+		); sourceTree = "<group>"; };
+		A10000000000000100000042 /* Mac */ = {isa = PBXGroup; children = (
+			A10000000000000100000013 /* SPLMeterView.mm */,
+		); path = Mac; sourceTree = "<group>"; };
+		A10000000000000100000043 /* Frameworks */ = {isa = PBXGroup; children = (
+			A10000000000000100000026 /* libfoobar2000_component_client.a */,
+			A10000000000000100000021 /* Cocoa.framework */,
+			A10000000000000100000025 /* libshared.a */,
+			A10000000000000100000022 /* libfoobar2000_SDK.a */,
+			A10000000000000100000023 /* libfoobar2000_SDK_helpers.a */,
+			A10000000000000100000024 /* libpfc-Mac.a */,
+		); name = Frameworks; sourceTree = "<group>"; };
+		A10000000000000100000044 /* mainGroup */ = {isa = PBXGroup; children = (
+			A10000000000000100000041 /* Sources */,
+			A10000000000000100000043 /* Frameworks */,
+			A10000000000000100000040 /* Products */,
+		); sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		A10000000000000100000050 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A10000000000000100000009 /* libfoobar2000_component_client.a in Frameworks */,
+				A10000000000000100000004 /* Cocoa.framework in Frameworks */,
+				A10000000000000100000008 /* libshared.a in Frameworks */,
+				A10000000000000100000005 /* libfoobar2000_SDK.a in Frameworks */,
+				A10000000000000100000006 /* libfoobar2000_SDK_helpers.a in Frameworks */,
+				A10000000000000100000007 /* libpfc-Mac.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		A10000000000000100000060 /* foo_dsp_splmeter */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A10000000000000100000070 /* Build configuration list for PBXNativeTarget "foo_dsp_splmeter" */;
+			buildPhases = (
+				A10000000000000100000080 /* Sources */,
+				A10000000000000100000050 /* Frameworks */,
+				A10000000000000100000081 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = foo_dsp_splmeter;
+			productName = foo_dsp_splmeter;
+			productReference = A10000000000000100000030 /* foo_dsp_splmeter.component */;
+			productType = "com.apple.product-type.bundle";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		A10000000000000100000061 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastUpgradeCheck = 1500;
+				TargetAttributes = {
+					A10000000000000100000060 = {
+						CreatedOnToolsVersion = 14.3.1;
+					};
+				};
+			};
+			buildConfigurationList = A10000000000000100000071 /* Build configuration list for PBXProject "foo_dsp_splmeter" */;
+			compatibilityVersion = "Xcode 12.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = A10000000000000100000044 /* mainGroup */;
+			productRefGroup = A10000000000000100000040 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				A10000000000000100000060 /* foo_dsp_splmeter */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		A10000000000000100000081 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		A10000000000000100000080 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A10000000000000100000003 /* SPLMeterView.mm in Sources */,
+				A10000000000000100000002 /* dsp_splmeter.cpp in Sources */,
+				A10000000000000100000001 /* main.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		A10000000000000100000090 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = stdafx.h;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				HEADER_SEARCH_PATHS = (
+					../sdk/foobar2000,
+					../sdk,
+				);
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		A10000000000000100000091 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = stdafx.h;
+				GCC_PREPROCESSOR_DEFINITIONS = "NDEBUG=1";
+				HEADER_SEARCH_PATHS = (
+					../sdk/foobar2000,
+					../sdk,
+				);
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		A10000000000000100000092 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
+				DEVELOPMENT_TEAM = "";
+				GENERATE_INFOPLIST_FILE = YES;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.foobar2000.foo-dsp-splmeter";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				WRAPPER_EXTENSION = component;
+			};
+			name = Debug;
+		};
+		A10000000000000100000093 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
+				DEVELOPMENT_TEAM = "";
+				GENERATE_INFOPLIST_FILE = YES;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.foobar2000.foo-dsp-splmeter";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				WRAPPER_EXTENSION = component;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		A10000000000000100000071 /* Build configuration list for PBXProject "foo_dsp_splmeter" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A10000000000000100000090 /* Debug */,
+				A10000000000000100000091 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A10000000000000100000070 /* Build configuration list for PBXNativeTarget "foo_dsp_splmeter" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A10000000000000100000092 /* Debug */,
+				A10000000000000100000093 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = A10000000000000100000061 /* Project object */;
+}
