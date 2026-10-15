@@ -149,7 +149,7 @@ public:
 
     bool on_chunk(audio_chunk * chunk, abort_callback &) {
         if (chunk->is_empty()) return true;
-        const MeterSettings settings = splmeter::get_settings();
+        const splmeter::MeterSettings settings = splmeter::get_settings();
         if (!settings.enabled) return true;
 
         const unsigned sampleRate = chunk->get_sample_rate();
