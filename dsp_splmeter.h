@@ -14,14 +14,15 @@ static constexpr GUID ui_guid = { 0x8f2a63d1, 0x47b9, 0x4e05, { 0xc3, 0x91, 0x58
 // ---- Calibration settings (user editable) ----
 struct MeterSettings {
     // Sensitivity of the headphones: dB SPL at 1 kHz for 1 mW input
-    double sensitivityDbSPL = 100.0;   // typical over-ear
+    double sensitivityDbSPL = 96.0;    // user's headphones (~96 dB, verify vs 80 vs 250 ohm unit)
     // Impedance in ohms (used for voltage -> power conversion)
-    double impedanceOhms = 32.0;
-    // Max output voltage of the DAC/headphone amp, V RMS at 100% volume
-    double dacMaxVoltageRMS = 1.0;     // typical USB DAC line/headphone out
-    // System volume percent (0-100). foobar2000 can't read the Mac's
-    // system volume reliably, so the user sets it here (or you automate it later).
-    double systemVolumePercent = 45.0;
+    double impedanceOhms = 80.0;       // user's unit is 80 ohm (250 ohm variant also exists)
+    // Max output voltage of the DAC/headphone amp, V RMS at 100% volume (0 dBFS tone)
+    // Unknown for the user's DAC: calibrate with a 1 kHz 0 dBFS tone + multimeter.
+    double dacMaxVoltageRMS = 1.0;
+    // Volume attenuation, as a percent (0-100). A_vol = -20*log10(percent/100).
+    // foobar2000 can't read the Mac's system volume reliably, so the user sets it here.
+    double systemVolumePercent = 100.0;
     // Safety threshold
     double thresholdDbSPL = 80.0;
     // Meter smoothing / history

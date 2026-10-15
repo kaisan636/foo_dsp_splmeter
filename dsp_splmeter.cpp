@@ -41,10 +41,10 @@ double g_second_power = 0.0;
 
 MeterSettings default_settings() {
     MeterSettings s;
-    s.sensitivityDbSPL = 100.0;
-    s.impedanceOhms = 32.0;
-    s.dacMaxVoltageRMS = 1.0;
-    s.systemVolumePercent = 45.0;
+    s.sensitivityDbSPL = 96.0;
+    s.impedanceOhms = 80.0;
+    s.dacMaxVoltageRMS = 1.0;   // unknown until measured; calibrate with a 1 kHz 0 dBFS tone
+    s.systemVolumePercent = 100.0;
     s.thresholdDbSPL = 80.0;
     s.enabled = true;
     return s;
@@ -83,11 +83,13 @@ void make_preset(dsp_preset & out) {
     builder.finish(dsp_guid, out);
 }
 
-// Estimate SPL from digital full-scale level.
-//   voltageRMS = dacMaxVoltageRMS * systemVolume
-//   powermW    = (voltageRMS^2 / impedanceOhms) * 1000
-//   SPL        = sensitivity + 10*log10(powermW / 1mW)
-// Then add the signal's own dBFS level: a -20 dBFS RMS signal plays 20 dB quieter.
+// Estimate SPL, identical to the user's reference formula:
+//   SPL_ref = S + 30 + 20*log10(V_FS) - 10*log10(Z)
+//   SPL     = SPL_ref + L + G_dig - A_vol
+// where L + G_dig is the post-DSP-chain RMS (this DSP sits after EQ/preamp/
+// ReplayGain, so digital gain is already in the measurement) and
+// A_vol = -20*log10(volume). Expanding:
+//   S + 10*log10(1000 * (V_FS*vol)^2 / Z) + L  ==  SPL_ref + L - A_vol
 double estimate_spl(const MeterSettings & s, double rmsDbFS) {
     const double vol = std::clamp(s.systemVolumePercent, 0.0, 100.0) / 100.0;
     const double voltage = s.dacMaxVoltageRMS * vol;

@@ -29,19 +29,19 @@ jobs:
         run: |
           brew install p7zip
           curl -fsSL -o sdk.7z "${{ steps.sdk.outputs.url }}"
-          mkdir sdk
-          7z x -osdk sdk.7z >/dev/null
-          echo "--- SDK root ---"; ls -la sdk
-          echo "--- tree (3 levels) ---"; find sdk -maxdepth 3 -type d | sort | head -40
-          echo "--- all xcodeprojs ---"; find sdk -name "*.xcodeproj" | head -20
+          mkdir -p ../sdk
+          7z x -o../sdk sdk.7z >/dev/null
+          echo "--- SDK root ---"; ls -la ../sdk
 
-      - name: Discover SDK build scheme and build component
+      - name: Build SDK libraries (required order)
         run: |
           set -e
-          echo "--- pfc targets ---"
-          xcodebuild -project sdk/pfc/pfc.xcodeproj -list
-          echo "--- foo_sample targets (reference build layout) ---"
-          xcodebuild -project sdk/foobar2000/foo_sample/foo_sample.xcodeproj -list
+          BUILD="$PWD/build/Release"
+          xcodebuild -project ../sdk/pfc/pfc.xcodeproj -target pfc-Mac -configuration Release CONFIGURATION_BUILD_DIR="$BUILD" CODE_SIGNING_ALLOWED=NO build
+          xcodebuild -project ../sdk/foobar2000/shared/shared.xcodeproj -target shared -configuration Release CONFIGURATION_BUILD_DIR="$BUILD" CODE_SIGNING_ALLOWED=NO build
+          xcodebuild -project ../sdk/foobar2000/SDK/foobar2000_SDK.xcodeproj -target foobar2000_SDK -configuration Release CONFIGURATION_BUILD_DIR="$BUILD" CODE_SIGNING_ALLOWED=NO build
+          xcodebuild -project ../sdk/foobar2000/helpers/foobar2000_SDK_helpers.xcodeproj -target foobar2000_SDK_helpers -configuration Release CONFIGURATION_BUILD_DIR="$BUILD" CODE_SIGNING_ALLOWED=NO build
+          xcodebuild -project ../sdk/foobar2000/foobar2000_component_client/foobar2000_component_client.xcodeproj -target foobar2000_component_client -configuration Release CONFIGURATION_BUILD_DIR="$BUILD" CODE_SIGNING_ALLOWED=NO build
 
       - name: Build component
         run: |
