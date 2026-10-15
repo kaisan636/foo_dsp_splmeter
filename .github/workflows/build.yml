@@ -37,7 +37,11 @@ jobs:
         run: |
           set -e
           BUILD="$PWD/build/Release"
-          xcodebuild -project ../sdk/pfc/pfc.xcodeproj -target pfc-Mac -configuration Release CONFIGURATION_BUILD_DIR="$BUILD" CODE_SIGNING_ALLOWED=NO build
+          for p in ../sdk/pfc/pfc.xcodeproj ../sdk/foobar2000/shared/shared.xcodeproj ../sdk/foobar2000/SDK/foobar2000_SDK.xcodeproj ../sdk/foobar2000/helpers/foobar2000_SDK_helpers.xcodeproj ../sdk/foobar2000/foobar2000_component_client/foobar2000_component_client.xcodeproj; do
+            echo "--- targets in $p ---"
+            xcodebuild -project "$p" -list
+          done
+          xcodebuild -project ../sdk/pfc/pfc.xcodeproj -target pfc -configuration Release CONFIGURATION_BUILD_DIR="$BUILD" CODE_SIGNING_ALLOWED=NO build
           xcodebuild -project ../sdk/foobar2000/shared/shared.xcodeproj -target shared -configuration Release CONFIGURATION_BUILD_DIR="$BUILD" CODE_SIGNING_ALLOWED=NO build
           xcodebuild -project ../sdk/foobar2000/SDK/foobar2000_SDK.xcodeproj -target foobar2000_SDK -configuration Release CONFIGURATION_BUILD_DIR="$BUILD" CODE_SIGNING_ALLOWED=NO build
           xcodebuild -project ../sdk/foobar2000/helpers/foobar2000_SDK_helpers.xcodeproj -target foobar2000_SDK_helpers -configuration Release CONFIGURATION_BUILD_DIR="$BUILD" CODE_SIGNING_ALLOWED=NO build
