@@ -29,7 +29,7 @@
 		A10000000000000100000021 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		A10000000000000100000022 /* libfoobar2000_SDK.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libfoobar2000_SDK.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		A10000000000000100000023 /* libfoobar2000_SDK_helpers.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libfoobar2000_SDK_helpers.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		A10000000000000100000024 /* libpfc-Mac.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = "libpfc-Mac.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		A10000000000000100000024 /* libpfc-Mac.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; name = "libpfc.a"; path = "libpfc.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A10000000000000100000025 /* libshared.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libshared.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		A10000000000000100000026 /* libfoobar2000_component_client.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libfoobar2000_component_client.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		A10000000000000100000040 /* Products */ = {isa = PBXGroup; children = (A10000000000000100000030 /* foo_dsp_splmeter.component */); name = Products; sourceTree = "<group>"; };
