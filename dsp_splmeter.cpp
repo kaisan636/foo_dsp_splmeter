@@ -4,6 +4,7 @@
 #include <SDK/cfg_var.h>
 #include <algorithm>
 #include <atomic>
+#include <chrono>
 #include <cstring>
 #include <cmath>
 #include <mutex>
@@ -37,6 +38,10 @@ double g_second_sum = 0.0;
 t_uint64 g_second_samples = 0;
 double g_second_power = 0.0;
 
+// Wall clock for ballistics / dose integration
+std::chrono::steady_clock::time_point g_last_frame = std::chrono::steady_clock::now();
+bool g_have_last_frame = false;
+
 }
 
 MeterSettings default_settings() {
@@ -64,6 +69,7 @@ void set_settings(const MeterSettings & settings) {
     clipped.dacMaxVoltageRMS = std::clamp(clipped.dacMaxVoltageRMS, 0.05, 10.0);
     clipped.systemVolumePercent = std::clamp(clipped.systemVolumePercent, 0.0, 100.0);
     clipped.thresholdDbSPL = std::clamp(clipped.thresholdDbSPL, 40.0, 120.0);
+    clipped.themeIndex = std::clamp(clipped.themeIndex, 0, splmeter::theme_count - 1);
     {
         std::lock_guard<std::mutex> lock(g_settings_mutex);
         g_cached_settings = clipped;
@@ -106,18 +112,58 @@ MeterState get_meter_state() {
 
 void push_meter_frame(double rmsDbFS, double peakDbFS, double spl) {
     std::lock_guard<std::mutex> lock(g_meter_mutex);
+
+    // Frame delta for ballistics and dose integration
+    const auto now = std::chrono::steady_clock::now();
+    double dt = 0.0;
+    if (g_have_last_frame) {
+        dt = std::chrono::duration<double>(now - g_last_frame).count();
+    }
+    g_last_frame = now;
+    g_have_last_frame = true;
+    if (dt <= 0.0) dt = 0.0;
+    if (dt > 1.0) dt = 1.0;   // ignore huge gaps (playback paused, etc.)
+
     g_meter_state.rmsDbFS = rmsDbFS;
     g_meter_state.peakDbFS = peakDbFS;
     g_meter_state.estimatedSPL = spl;
     g_meter_state.estimatedPeakSPL = std::max(g_meter_state.estimatedPeakSPL, spl);
     g_meter_state.overThreshold = spl >= g_cached_settings.thresholdDbSPL;
 
-    // Rough Leq-style accumulation: every second above 80 dB adds exposure.
-    // We use a simplified exchange rate of 3 dB (ISO standard).
+    // Meter ballistics: fast attack (0.5/frame), slow release (0.08/frame).
+    // Frame-rate normalized so it behaves the same at any chunk size.
+    const double cur = g_meter_state.displaySPL;
+    const double alpha = (spl > cur) ? 0.5 : 0.08;
+    const double blend = 1.0 - std::pow(1.0 - alpha, dt * 60.0);
+    g_meter_state.displaySPL = cur + (spl - cur) * blend;
+
+    // Peak hold: latch new peaks, hold 1.5 s, then fall at 15 dB/s down to the
+    // current level. Same falling-peak-cap feel as the JendaT spectrum bars.
+    if (spl >= g_meter_state.peakHoldSPL) {
+        g_meter_state.peakHoldSPL = spl;
+        g_meter_state.peakHoldAge = 0.0;
+    } else {
+        g_meter_state.peakHoldAge += dt;
+        if (g_meter_state.peakHoldAge > 1.5) {
+            const double fallen = g_meter_state.peakHoldSPL - dt * 15.0;
+            g_meter_state.peakHoldSPL = std::max(fallen, g_meter_state.displaySPL);
+        }
+    }
+
+    // NIOSH hearing dose: 100 % = 8 h at 85 dB SPL, 3 dB exchange rate.
+    //   T(spl) hours = 8 / 2^((spl - 85) / 3);  dose% += dt/T * 100
+    // Below 70 dB the allowed time exceeds a day, so integration is negligible.
+    if (spl >= 70.0 && dt > 0.0) {
+        const double allowedHours = 8.0 / std::pow(2.0, (spl - 85.0) / 3.0);
+        if (allowedHours > 0.0) {
+            g_meter_state.dosePercent += (dt / 3600.0) / allowedHours * 100.0;
+        }
+    }
+
+    // Rough Leq-style accumulation (kept for compatibility)
     if (spl > 0.0) {
         const double excess = spl - 80.0;
-        // exposure seconds equivalent at 80 dB: 1s * 10^(excess/10) for 3dB rate... simplified to /10
-        g_meter_state.laeqSeconds += std::pow(10.0, excess / 10.0);
+        g_meter_state.laeqSeconds += std::pow(10.0, excess / 10.0) * dt;
     }
 
     // 1 Hz history
@@ -135,6 +181,16 @@ void push_meter_frame(double rmsDbFS, double peakDbFS, double spl) {
             g_second_samples = 0;
         }
     }
+}
+
+void reset_exposure() {
+    std::lock_guard<std::mutex> lock(g_meter_mutex);
+    g_meter_state.estimatedPeakSPL = 0.0;
+    g_meter_state.laeqSeconds = 0.0;
+    g_meter_state.dosePercent = 0.0;
+    g_meter_state.peakHoldSPL = 0.0;
+    g_meter_state.peakHoldAge = 0.0;
+    g_meter_state.historyCount = 0;
 }
 
 }

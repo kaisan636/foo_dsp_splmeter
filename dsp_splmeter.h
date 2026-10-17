@@ -25,24 +25,37 @@ struct MeterSettings {
     double systemVolumePercent = 100.0;
     // Safety threshold
     double thresholdDbSPL = 80.0;
-    // Meter smoothing / history
-    bool enabled = true;               // meter active (DSP itself is pass-through)
+    // Meter on/off (the DSP itself is ALWAYS pass-through; this only freezes measurement)
+    bool enabled = true;
+    // UI theme index, see kThemes[] in SPLMeterView.mm (JendaT-suite style presets)
+    int themeIndex = 0;
 };
 
 static constexpr size_t history_length = 600; // seconds of 1Hz history
+
+// Number of theme presets; keep in sync with kThemes[] in SPLMeterView.mm
+static constexpr int theme_count = 6;
 
 struct MeterState {
     // Written by DSP thread, read by UI thread. Guarded by mutex.
     double rmsDbFS = -120.0;          // current RMS of the signal (dBFS)
     double peakDbFS = -120.0;
-    double estimatedSPL = 0.0;        // current estimated dB SPL
-    double estimatedPeakSPL = 0.0;    // peak SPL since playback start
+    double estimatedSPL = 0.0;        // current estimated dB SPL (instant)
+    double estimatedPeakSPL = 0.0;    // session max SPL since last reset
     double laeqSeconds = 0.0;         // time-integrated Leq exposure seconds at current level
     bool overThreshold = false;
+
+    // Meter ballistics (JendaT-suite style): smoothed level + falling peak cap
+    double displaySPL = 0.0;          // smoothed, fast attack / slow release
+    double peakHoldSPL = 0.0;         // peak-hold marker, decays after 1.5 s hold
+    double peakHoldAge = 0.0;         // seconds the peak has been held
+
+    // Hearing dose, NIOSH style: 100 % = 8 h at 85 dB SPL, 3 dB exchange rate
+    double dosePercent = 0.0;
+
     double historySPL[history_length] = {};
     size_t historyCount = 0;          // how many entries are valid (most recent at end)
 };
-
 
 
 MeterSettings default_settings();
@@ -54,5 +67,7 @@ void make_preset(dsp_preset & out);
 // Shared meter state, thread-safe
 MeterState get_meter_state();
 void push_meter_frame(double rmsDbFS, double peakDbFS, double spl);
+// Clear session peak, dose and history (called from the UI reset button)
+void reset_exposure();
 
 }
