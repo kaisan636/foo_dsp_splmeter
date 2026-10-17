@@ -331,11 +331,6 @@ static inline NSColor * levelColor(double spl, double threshold) {
     self.subReadout.textColor = [pal.text colorWithAlphaComponent:0.75];
 }
 
-- (void)viewDidChangeEffectiveAppearance {
-    [super viewDidChangeEffectiveAppearance];
-    [self refreshTheme];
-}
-
 - (void)refresh {
     const splmeter::MeterState st = splmeter::get_meter_state();
     const splmeter::MeterSettings cfg = splmeter::get_settings();
@@ -343,6 +338,7 @@ static inline NSColor * levelColor(double spl, double threshold) {
     self.bigReadout.textColor = splmeter_ui::levelColor(st.displaySPL, cfg.thresholdDbSPL);
     self.subReadout.stringValue = [NSString stringWithFormat:@"peak %.1f · RMS %.1f dBFS · limit %.0f dB",
         st.peakHoldSPL, st.rmsDbFS, cfg.thresholdDbSPL];
+    [self refreshTheme];
     self.doseReadout.stringValue = [NSString stringWithFormat:@"dose %.0f%%", st.dosePercent];
     self.doseReadout.textColor = st.dosePercent >= 100.0
         ? [NSColor colorWithCalibratedRed:1.0 green:0.3 blue:0.3 alpha:1.0]
